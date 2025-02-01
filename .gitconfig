@@ -1,0 +1,6 @@
+[user]
+  name = Kai Conragan
+  email = kai.conragan@gmail.com
+[core]
+  autoclrf = input
+	editor = nvim
