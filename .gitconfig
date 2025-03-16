@@ -1,0 +1,20 @@
+[user]
+  name = Kai Conragan
+  email = kai.conragan@gmail.com
+[core]
+  autoclrf = input
+	editor = nvim
+[github]
+	user = kconragan
+[init]
+	defaultBranch = main
+[push]
+	default = upstream	
+[alias]
+	ac = !git add -A && git commit
+	a = add
+	s = status
+	b = branch
+	l = log --oneline --graph
+	uncommit = reset --soft "HEAD^"
+	unstage = reset
