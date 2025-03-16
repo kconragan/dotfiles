@@ -50,6 +50,9 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # Alias 'vim' to 'nvim' (Neovim).
 alias vim="nvim"
 
+# Alias 'vim' to 'nvim' (Neovim).
+alias g="git"
+
 # Alias 'c' to 'clear' to clear the terminal screen.
 alias c='clear'
 
