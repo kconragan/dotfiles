@@ -123,3 +123,11 @@ eval "$(pyenv init -)"
 # Initialize the Starship prompt for Zsh. Starship is a highly customizable
 # cross-shell prompt that shows relevant information about your environment.
 eval "$(starship init zsh)"
+
+
+# ------------------------------
+# TheFuck Prompt
+# ------------------------------
+
+# Intialize TheFuck promp for mystyped terminal commands
+eval $(thefuck --alias)
