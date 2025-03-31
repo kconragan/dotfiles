@@ -117,13 +117,22 @@ command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
 # ------------------------------
-# Starship Prompt
+# Oh My Posh Prompt
 # ------------------------------
 
 # Initialize the Starship prompt for Zsh. Starship is a highly customizable
 # cross-shell prompt that shows relevant information about your environment.
-eval "$(starship init zsh)"
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # macOS specific Oh My Posh config
+  eval "$(oh-my-posh init zsh --config $HOME/dotfiles/zsh/oh-my-posh/mac-theme.omp.json)"
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  # Linux specific Oh My Posh config
+  eval "$(oh-my-posh init zsh --config $HOME/dotfiles/zsh/oh-my-posh/linux-theme.omp.json)"
+else
+  # Default config
+  eval "$(oh-my-posh init zsh --config $HOME/dotfiles/zsh/oh-my-posh/mac-theme.omp.json)"
+fi
 
 # ------------------------------
 # TheFuck Prompt
