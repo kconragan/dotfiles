@@ -135,3 +135,9 @@ ln -sf "$DOTFILES_DIR/common/.gitconfig" ~/.gitconfig
 # Symlink main tmux config
 echo " - Setting up tmux..."
 ln -sf "$DOTFILES_DIR/common/.tmux.conf" ~/.tmux.conf
+
+# Install Tmux Plugin Manager if it doesn't exist
+if [ ! -d ~/.tmux/plugins/tpm ]; then
+  echo " - Installing Tmux Plugin Manager..."
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
