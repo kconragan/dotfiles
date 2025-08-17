@@ -20,9 +20,14 @@ Darwin)
 
   # Add macOS specific git configuration here
   echo " - Configuring git credentials and user info..."
+
   git config --global user.name "Kai"
   git config --global user.email "kai.conragan@gmail.com"
-  git config --global credential.https://github.com.helper "osxkeychain"
+
+  # Conditionally set the credential helper for GitHub only if not already set
+  if ! git config --global --get credential.https://github.com.helper >/dev/null; then
+    git config --global credential.https://github.com.helper "osxkeychain"
+  fi
 
   if [ -f "$DOTFILES_DIR/common/.zshrc" ]; then
     echo " - Symlinking .zshrc"
@@ -47,9 +52,19 @@ Linux)
 
   # Add Linux specific git configuration here
   echo " - Configuring git credentials and user info..."
+
   git config --global user.name "Kai"
   git config --global user.email "kai.conragan@gmail.com"
-  git config --global credential.https://github.com.helper "/usr/bin/gh auth git-credential"
+
+  # Conditionally set the credential helper for GitHub only if not already set
+  if ! git config --global --get credential.https://github.com.helper >/dev/null; then
+    git config --global credential.https://github.com.helper "/usr/bin/gh auth git-credential"
+  fi
+
+  if [ -f "$DOTFILES_DIR/linux/.bashrc" ]; then
+    echo " - Symlinking platform-specific .bashrc"
+    ln -sf "$DOTFILES_DIR/linux/.bashrc" ~/.bashrc
+  fi
 
   if [ -f "$DOTFILES_DIR/linux/.vimrc" ]; then
     echo " - Symlinking platform-specific .vimrc"
