@@ -23,6 +23,11 @@ Darwin)
   git config --global user.name "Kai"
   git config --global user.email "kai.conragan@gmail.com"
   git config --global credential.https://github.com.helper "osxkeychain"
+
+  if [ -f "$DOTFILES_DIR/common/.zshrc" ]; then
+    echo " - Symlinking .zshrc"
+    ln -sf "$DOTFILES_DIR/common/.zshrc" ~/.zshrc
+  fi
   ;;
 
 Linux)
@@ -45,6 +50,11 @@ Linux)
   git config --global user.name "Kai"
   git config --global user.email "kai.conragan@gmail.com"
   git config --global credential.https://github.com.helper "/usr/bin/gh auth git-credential"
+
+  if [ -f "$DOTFILES_DIR/linux/.vimrc" ]; then
+    echo " - Symlinking platform-specific .vimrc"
+    ln -sf "$DOTFILES_DIR/linux/.vimrc" ~/.vimrc
+  fi
   ;;
 
 *)
@@ -67,14 +77,3 @@ ln -sf "$DOTFILES_DIR/common/.gitconfig" ~/.gitconfig
 # Link tmux config
 echo " - Setting up tmux..."
 ln -sf "$DOTFILES_DIR/common/.tmux.conf" ~/.tmux.conf
-
-# Link zshrc file
-echo " - Setting up zsh..."
-ln -sf "$DOTFILES_DIR/common/.zshrc" ~/.zshrc
-
-# Symlink platform-specific files
-# This is a robust way to link a platform-specific dotfile.
-if [ "$(uname -s)" == "Linux" ] && [ -f "$DOTFILES_DIR/linux/.vimrc" ]; then
-  echo " - Symlinking platform-specific .vimrc"
-  ln -sf "$DOTFILES_DIR/linux/.vimrc" ~/.vimrc
-fi
