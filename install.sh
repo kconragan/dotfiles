@@ -82,6 +82,10 @@ Linux)
     echo " - Neovim not found. Installing now..."
     sudo pacman -S neovim --noconfirm
   fi
+  if ! command -v starship &>/dev/null; then
+    echo " - Starship not found. Installing now..."
+    sudo pacman -S starship --noconfirm
+  fi
 
   # Add Linux specific git configuration here
   echo " - Configuring git credentials and user info..."
@@ -130,11 +134,18 @@ ln -sf "$DOTFILES_DIR/common/nvim" ~/.config/nvim
 
 # Symlink gitconfig
 echo " - Setting up git..."
+mkdir -p ~/.config
 ln -sf "$DOTFILES_DIR/common/.gitconfig" ~/.gitconfig
 
 # Symlink main tmux config
 echo " - Setting up tmux..."
+mkdir -p ~/.config
 ln -sf "$DOTFILES_DIR/common/.tmux.conf" ~/.tmux.conf
+
+# Symlink Starship configuration
+echo " - Setting up Starship..."
+mkdir -p ~/.config
+ln -sf "$DOTFILES_DIR/common/starship/starship.toml" ~/.config/starship.toml
 
 # Install Tmux Plugin Manager if it doesn't exist
 if [ ! -d ~/.tmux/plugins/tpm ]; then

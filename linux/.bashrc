@@ -19,8 +19,14 @@ alias cd='z'
 
 alias c='clear'
 
+alias fff='fastfetch'
+
 fastfetch
 
 source /usr/share/bash-completion/bash_completion
 
+# Initialize the Starship prompt
+eval "$(starship init bash)"
+
+# Initialize Zoxide
 eval "$(zoxide init bash)"
