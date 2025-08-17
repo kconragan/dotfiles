@@ -1,26 +1,89 @@
-# My Personal Dotfiles
+# My Dotfiles
 
 These are my dotfiles for setting up my development environment on macOS and Arch Linux. The setup leverages GNU Stow for symlinking configurations and includes setup instructions for Zsh, Tmux, Neovim (LazyVim), Hyprland, and various command-line tools.
-
-Okay, here is the complete, restructured README.md file content again:
-
-Markdown
 
 # My Personal Dotfiles: A Modern Terminal Setup ✨
 
 Welcome to my personal configuration files (`dotfiles`)! This setup aims to create a beautiful and productive command-line experience on both **macOS** and **Arch Linux**.
 
-**What you get:**
+## **What you get:**
 
-* **Modern Look & Feel:** Uses modern terminals like Ghostty (macOS) or Kitty (Linux) with full True Color support.
+* **Modern Look & Feel:** Uses modern terminal Ghostty ) with full True Color support.
 * **Rich Icons & Glyphs:** Powered by the Iosevka Term Nerd Font.
-* **Helpful Prompt:** Customized Zsh prompt using Oh My Posh for relevant git status, Python version, etc.
 * **Efficient Shell:** Zsh with auto-suggestions, syntax highlighting, and smart directory jumping (`zoxide`).
 * **Powerful Editing:** Neovim setup based on LazyVim for a great out-of-the-box experience.
 * **Terminal Multitasking:** Tmux configured with easy navigation, session saving, and useful plugins.
+* **Helpful Prompt:** Customized Zsh prompt using Oh My Posh for relevant git status, Python version, etc.
 * **(Arch Linux):** A configured Hyprland desktop environment with Waybar, Rofi, Dunst, and more.
 
 ---
+
+## Organization:
+
+The repository is organized into the following structure:
+* `common/`: For dotfiles that are shared between all platforms.
+* `mac/`: For configuration specific to macOS.
+* `linux/`: For configuration specific to Arch Linux.
+* `install.sh`: The main script that handles the setup process.
+
+
+## Installation
+
+### Step 1: Clone the repo
+
+```bash
+git clone [https://github.com/kconragan/dotfiles](https://github.com/kconragan/dotfiles) ~/.dotfiles
+```
+
+
+### Step 2: Install Homebrew (macOS only)
+On macOS, you'll need to install Homebrew, the package manager for macOS. You can install it by running this command in your terminal:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Note: on Arch Linux the install.sh script relies on pacman which is installed by default
+
+### Step 3: Run the install script
+
+```
+cd ~/.dotfiles
+./install.sh
+```
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Installation Guide
 
