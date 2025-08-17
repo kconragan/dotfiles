@@ -58,9 +58,9 @@ Darwin)
     ln -sf "$DOTFILES_DIR/common/.zshrc" ~/.zshrc
   fi
 
-  # Symlink platform-specific tmux config
-  echo " - Symlinking platform-specific tmux config"
-  ln -sf "$DOTFILES_DIR/mac/tmux/tmux.conf" ~/.tmux.conf
+  # Symlink platform-specific tmux override
+  echo " - Symlinking platform-specific tmux override config"
+  ln -sf "$DOTFILES_DIR/mac/tmux/tmux.conf" ~/.tmux.conf.local
 
   # Symlink platform-specific Ghostty config
   echo " - Symlinking platform-specific Ghostty config"
@@ -104,9 +104,9 @@ Linux)
     ln -sf "$DOTFILES_DIR/linux/.vimrc" ~/.vimrc
   fi
 
-  # Symlink platform-specific tmux config
-  echo " - Symlinking platform-specific tmux config"
-  ln -sf "$DOTFILES_DIR/linux/tmux/tmux.conf" ~/.tmux.conf
+  # Symlink platform-specific tmux override
+  echo " - Symlinking platform-specific tmux override config"
+  ln -sf "$DOTFILES_DIR/linux/tmux/tmux.conf" ~/.tmux.conf.local
 
   # Symlink platform-specific Ghostty config
   echo " - Symlinking platform-specific Ghostty config"
@@ -131,3 +131,7 @@ ln -sf "$DOTFILES_DIR/common/nvim" ~/.config/nvim
 # Symlink gitconfig
 echo " - Setting up git..."
 ln -sf "$DOTFILES_DIR/common/.gitconfig" ~/.gitconfig
+
+# Symlink main tmux config
+echo " - Setting up tmux..."
+ln -sf "$DOTFILES_DIR/common/.tmux.conf" ~/.tmux.conf
