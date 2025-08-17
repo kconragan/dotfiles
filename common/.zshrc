@@ -4,14 +4,6 @@
 export TERM="xterm-256color"
 
 # -----------------------------------------------------------------------------
-# Omarchy Environment
-# -----------------------------------------------------------------------------
-# This line sources Omarchy's core environment, which is necessary for
-# all of its custom aliases, functions, and paths to work correctly in Zsh.
-
-source ~/.local/share/omarchy/default/bash/rc
-
-# -----------------------------------------------------------------------------
 # General Aliases and Commands
 # -----------------------------------------------------------------------------
 
@@ -40,7 +32,7 @@ alias c='clear'
 
 fastfetch
 
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # -----------------------------------------------------------------------------
 # Shell Enhancements

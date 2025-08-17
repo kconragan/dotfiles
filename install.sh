@@ -17,6 +17,26 @@ Darwin)
     echo " - Neovim not found. Installing now..."
     brew install neovim
   fi
+  if ! command -v eza &>/dev/null; then
+    echo " - Eza not found. Installing now..."
+    brew install eza
+  fi
+  if ! command -v zoxide &>/dev/null; then
+    echo " - Zoxide not found. Installing now..."
+    brew install zoxide
+  fi
+  if ! command -v fastfetch &>/dev/null; then
+    echo " - Fastfetch not found. Installing now..."
+    brew install fastfetch
+  fi
+  if ! command -v zsh-syntax-highlighting &>/dev/null; then
+    echo " - ZSH Syntax Highlighting not found. Installing now..."
+    brew install zsh-syntax-highlighting
+  fi
+  if ! command -v starship &>/dev/null; then
+    echo " - Starship not found. Installing now..."
+    brew install starship
+  fi
 
   # Add macOS specific git configuration here
   echo " - Configuring git credentials and user info..."
