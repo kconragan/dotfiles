@@ -1,0 +1,14 @@
+# Font settings
+
+font-family = Iosevka
+font-style = Medium
+font-style-bold = Bold
+font-style-italic = Medium Italic
+font-style-bold-italic = Bold Italic
+
+# Other settings
+
+bold-is-bright = true
+cursor-invert-fg-bg = true
+shell-integration-features = no-cursor
+mouse-hide-while-typing = true

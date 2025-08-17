@@ -17,6 +17,10 @@ Darwin)
     echo " - Neovim not found. Installing now..."
     brew install neovim
   fi
+  if ! command -v reattach-to-user-namespace &>/dev/null; then
+    echo " - reattach-to-user-namespace not found. Installing now..."
+    brew install reattach-to-user-namespace
+  fi
   if ! command -v eza &>/dev/null; then
     echo " - Eza not found. Installing now..."
     brew install eza
@@ -53,6 +57,15 @@ Darwin)
     echo " - Symlinking .zshrc"
     ln -sf "$DOTFILES_DIR/common/.zshrc" ~/.zshrc
   fi
+
+  # Symlink platform-specific tmux config
+  echo " - Symlinking platform-specific tmux config"
+  ln -sf "$DOTFILES_DIR/mac/tmux/tmux.conf" ~/.tmux.conf
+
+  # Symlink platform-specific Ghostty config
+  echo " - Symlinking platform-specific Ghostty config"
+  mkdir -p ~/.config/ghostty
+  ln -sf "$DOTFILES_DIR/mac/ghostty/config" ~/.config/ghostty/config
   ;;
 
 Linux)
@@ -90,6 +103,15 @@ Linux)
     echo " - Symlinking platform-specific .vimrc"
     ln -sf "$DOTFILES_DIR/linux/.vimrc" ~/.vimrc
   fi
+
+  # Symlink platform-specific tmux config
+  echo " - Symlinking platform-specific tmux config"
+  ln -sf "$DOTFILES_DIR/linux/tmux/tmux.conf" ~/.tmux.conf
+
+  # Symlink platform-specific Ghostty config
+  echo " - Symlinking platform-specific Ghostty config"
+  mkdir -p ~/.config/ghostty
+  ln -sf "$DOTFILES_DIR/linux/ghostty/config" ~/.config/ghostty/config
   ;;
 
 *)
@@ -103,12 +125,9 @@ echo "Installing common dotfiles..."
 
 # Symlink Neovim configuration
 echo " - Setting up Neovim..."
+mkdir -p ~/.config
 ln -sf "$DOTFILES_DIR/common/nvim" ~/.config/nvim
 
 # Symlink gitconfig
 echo " - Setting up git..."
 ln -sf "$DOTFILES_DIR/common/.gitconfig" ~/.gitconfig
-
-# Link tmux config
-echo " - Setting up tmux..."
-ln -sf "$DOTFILES_DIR/common/.tmux.conf" ~/.tmux.conf
