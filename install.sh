@@ -13,10 +13,6 @@ Darwin)
     echo " - Git not found. Installing now..."
     brew install git
   fi
-  if ! command -v nvim &>/dev/null; then
-    echo " - Neovim not found. Installing now..."
-    brew install neovim
-  fi
   if ! command -v reattach-to-user-namespace &>/dev/null; then
     echo " - reattach-to-user-namespace not found. Installing now..."
     brew install reattach-to-user-namespace
@@ -53,9 +49,9 @@ Darwin)
     git config --global credential.https://github.com.helper "osxkeychain"
   fi
 
-  if [ -f "$DOTFILES_DIR/common/.zshrc" ]; then
+  if [ -f "$DOTFILES_DIR/common/zsh/.zshrc" ]; then
     echo " - Symlinking .zshrc"
-    ln -sf "$DOTFILES_DIR/common/.zshrc" ~/.zshrc
+    ln -sf "$DOTFILES_DIR/common/zsh/.zshrc" ~/.zshrc
   fi
 
   # Symlink platform-specific tmux override
@@ -78,10 +74,6 @@ Linux)
     echo " - Git not found. Installing now..."
     sudo pacman -S git --noconfirm
   fi
-  if ! command -v nvim &>/dev/null; then
-    echo " - Neovim not found. Installing now..."
-    sudo pacman -S neovim --noconfirm
-  fi
   if ! command -v starship &>/dev/null; then
     echo " - Starship not found. Installing now..."
     sudo pacman -S starship --noconfirm
@@ -103,11 +95,6 @@ Linux)
     ln -sf "$DOTFILES_DIR/linux/.bashrc" ~/.bashrc
   fi
 
-  if [ -f "$DOTFILES_DIR/linux/.vimrc" ]; then
-    echo " - Symlinking platform-specific .vimrc"
-    ln -sf "$DOTFILES_DIR/linux/.vimrc" ~/.vimrc
-  fi
-
   # Symlink platform-specific tmux override
   echo " - Symlinking platform-specific tmux override config"
   ln -sf "$DOTFILES_DIR/linux/tmux/tmux.conf" ~/.tmux.conf.local
@@ -127,20 +114,13 @@ esac
 # 2. Install common and platform-specific dotfiles
 echo "Installing common dotfiles..."
 
-# Symlink Neovim configuration
-echo " - Setting up Neovim..."
-mkdir -p ~/.config
-ln -sf "$DOTFILES_DIR/common/nvim" ~/.config/nvim
-
 # Symlink gitconfig
 echo " - Setting up git..."
-mkdir -p ~/.config
 ln -sf "$DOTFILES_DIR/common/.gitconfig" ~/.gitconfig
 
 # Symlink main tmux config
 echo " - Setting up tmux..."
-mkdir -p ~/.config
-ln -sf "$DOTFILES_DIR/common/.tmux.conf" ~/.tmux.conf
+ln -sf "$DOTFILES_DIR/common/tmux/.tmux.conf" ~/.tmux.conf
 
 # Symlink Starship configuration
 echo " - Setting up Starship..."
