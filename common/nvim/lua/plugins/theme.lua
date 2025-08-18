@@ -1,0 +1,1 @@
+/home/kai/.config/omarchy/current/theme/neovim.lua

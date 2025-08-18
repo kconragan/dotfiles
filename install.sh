@@ -13,6 +13,10 @@ Darwin)
     echo " - Git not found. Installing now..."
     brew install git
   fi
+  if ! command -v nvim &>/dev/null; then
+    echo " - Neovim not found. Installing now..."
+    brew install neovim
+  fi
   if ! command -v reattach-to-user-namespace &>/dev/null; then
     echo " - reattach-to-user-namespace not found. Installing now..."
     brew install reattach-to-user-namespace
@@ -74,6 +78,10 @@ Linux)
     echo " - Git not found. Installing now..."
     sudo pacman -S git --noconfirm
   fi
+  if ! command -v nvim &>/dev/null; then
+    echo " - Neovim not found. Installing now..."
+    sudo pacman -S neovim --noconfirm
+  fi
   if ! command -v starship &>/dev/null; then
     echo " - Starship not found. Installing now..."
     sudo pacman -S starship --noconfirm
@@ -113,6 +121,11 @@ esac
 
 # 2. Install common and platform-specific dotfiles
 echo "Installing common dotfiles..."
+
+# Symlink Neovim configuration
+echo " - Setting up Neovim..."
+mkdir -p ~/.config
+ln -sf "$DOTFILES_DIR/common/nvim" ~/.config/nvim
 
 # Symlink gitconfig
 echo " - Setting up git..."
