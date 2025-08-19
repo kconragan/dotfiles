@@ -44,7 +44,6 @@ Darwin)
 
   # Add macOS specific git configuration here
   echo " - Configuring git credentials and user info..."
-
   git config --global user.name "Kai"
   git config --global user.email "kai.conragan@gmail.com"
 
@@ -89,7 +88,6 @@ Linux)
 
   # Add Linux specific git configuration here
   echo " - Configuring git credentials and user info..."
-
   git config --global user.name "Kai"
   git config --global user.email "kai.conragan@gmail.com"
 
@@ -111,6 +109,19 @@ Linux)
   echo " - Symlinking platform-specific Ghostty config"
   mkdir -p ~/.config/ghostty
   ln -sf "$DOTFILES_DIR/linux/ghostty/config" ~/.config/ghostty/config
+
+  # Symlink Hyprland configuration
+  echo " - Setting up Hyprland..."
+  mkdir -p ~/.config/hypr
+
+  # Find all .conf files in the source directory and create a symlink for each
+  for config_file in "$DOTFILES_DIR"/linux/hypr/*.conf; do
+    if [ -f "$config_file" ]; then
+      target_name=$(basename "$config_file")
+      echo "   - Symlinking $target_name"
+      ln -sf "$config_file" ~/.config/hypr/"$target_name"
+    fi
+  done
   ;;
 
 *)

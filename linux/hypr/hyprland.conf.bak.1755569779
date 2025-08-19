@@ -1,0 +1,24 @@
+# This is the main Hyprland configuration file.
+# It sources the default Omarchy configurations, the current theme,
+# and your personal override files.
+
+# --- Source Omarchy Defaults (do not edit these directly) ---
+source = ~/.local/share/omarchy/default/hypr/autostart.conf
+source = ~/.local/share/omarchy/default/hypr/bindings/media.conf
+source = ~/.local/share/omarchy/default/hypr/bindings/tiling.conf
+source = ~/.local/share/omarchy/default/hypr/bindings/utilities.conf
+source = ~/.local/share/omarchy/default/hypr/envs.conf
+source = ~/.local/share/omarchy/default/hypr/looknfeel.conf
+source = ~/.local/share/omarchy/default/hypr/input.conf
+source = ~/.local/share/omarchy/default/hypr/windows.conf
+
+# --- Source the Current Omarchy Theme ---
+source = ~/.config/omarchy/current/theme/hyprland.conf
+
+# --- Source Your Personal Overrides ---
+# Your customizations go in the files below, not in this file.
+source = ~/.config/hypr/monitors.conf
+source = ~/.config/hypr/input.conf
+source = ~/.config/hypr/bindings.conf
+source = ~/.config/hypr/envs.conf
+source = ~/.config/hypr/autostart.conf
