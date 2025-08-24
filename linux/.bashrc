@@ -14,6 +14,7 @@ source ~/.local/share/omarchy/default/bash/rc
 export HISTFILESIZE=10000
 export HISTSIZE=500
 export HISTTIMEFORMAT="%F %T"
+export EDITOR=nvim
 
 # Don't put duplicate lines in the history and do not add lines that start with a space
 export HISTCONTROL=erasedups:ignoredups:ignorespace
@@ -79,20 +80,59 @@ alias myip="whatsmyip"
 
 alias p='ping -c 4 1.1.1.1'
 
-function whatsmyip() {
-  # Get the name of the primary active network interface
-  local interface=$(ip route | grep '^default' | awk '{print $5}' | head -n1)
+# VPN Control Aliases
+alias vpn-up='sudo systemctl start wg-quick@wg-US-CA-813.service'
+alias vpn-down='sudo systemctl stop wg-quick@wg-US-CA-813.service'
+alias vpn-status='systemctl status wg-quick@wg-US-CA-813.service'
 
-  if [[ -n "$interface" ]]; then
-    # Internal IP Lookup
-    echo -n "Internal IP: "
-    ip addr show "$interface" | grep "inet " | awk '{print $2}' | cut -d/ -f1
-  else
-    echo "Could not determine the primary network interface."
+function whatsmyip() {
+  # Use color codes for output
+  local green='\033[0;32m'
+  local red='\033[0;31m'
+  local nc='\033[0m' # No Color
+
+  local active_interface=""
+  local lan_interface=""
+  local internal_ip=""
+  local is_connected=false
+
+  # --- VPN Status Check by Handshake AGE ---
+  local wg_interface=$(sudo wg show 2>/dev/null | grep 'interface:' | awk '{print $2}')
+  if [[ -n "$wg_interface" ]]; then
+    # Get the epoch time of the last handshake (the 2nd column)
+    local handshake_epoch=$(sudo wg show "$wg_interface" latest-handshakes | awk '{print $2}') # <-- This line is fixed
+
+    if [[ -n "$handshake_epoch" && "$handshake_epoch" =~ ^[0-9]+$ ]]; then
+      local current_epoch=$(date +%s)
+      local age=$((current_epoch - handshake_epoch))
+
+      # A handshake should occur roughly every 2 minutes.
+      # If it's older than 180 seconds (3 minutes), we consider it stale/disconnected.
+      if [[ "$age" -lt 180 ]]; then
+        is_connected=true
+        active_interface=$wg_interface
+      fi
+    fi
   fi
 
-  # External IP Lookup (no changes needed here)
-  echo -n "External IP: "
+  # --- Output Section ---
+  if [[ "$is_connected" == true ]]; then
+    echo -e "VPN Status: ${green}🟢 Connected${nc} (via ${active_interface})"
+  else
+    echo -e "VPN Status: ${red}🔴 Disconnected${nc}"
+  fi
+
+  lan_interface=$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -n1)
+  if [[ -n "$lan_interface" ]]; then
+    internal_ip=$(ip addr show "$lan_interface" | grep "inet " | awk '{print $2}' | cut -d/ -f1)
+    echo "Internal IP ($lan_interface): $internal_ip"
+  fi
+
+  if [[ "$is_connected" == true ]]; then
+    echo -n "External IP (VPN): "
+  else
+    echo -n "External IP (ISP): "
+  fi
   curl -s -4 ifconfig.me && echo ""
 }
 
