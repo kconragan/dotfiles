@@ -79,6 +79,7 @@ alias yayf="yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=dow
 alias myip="whatsmyip"
 
 alias p='ping -c 4 1.1.1.1'
+alias pg='ping -c 4 google.com'
 
 # VPN Control Aliases
 alias vpn-up='sudo systemctl start wg-quick@wg-US-CA-813.service'
