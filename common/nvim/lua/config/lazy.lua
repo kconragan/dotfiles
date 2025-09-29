@@ -21,6 +21,28 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.astro" },
     -- import/override with your plugins
     { import = "plugins" },
+    {
+      "NickvanDyke/opencode.nvim",
+      dependencies = {
+        -- Recommended for better prompt input, and required to use `opencode.nvim`'s embedded terminal — otherwise optional
+        { "folke/snacks.nvim", opts = { input = { enabled = true } } },
+      },
+      keys = {
+        { "<leader>ot", function() require("opencode").toggle() end, { desc = "Toggle opencode" } },
+        { "<leader>oA", function() require("opencode").ask() end, { desc = "Ask opencode" } },
+        { "<leader>oa", function() require("opencode").ask("@cursor: ") end, { desc = "Ask opencode about this" } },
+        { "<leader>oa", function() require("opencode").ask("@selection: ") end, mode = "v", desc = "Ask opencode about selection" },
+        { "<leader>on", function() require("opencode").command("session_new") end, { desc = "New opencode session" } },
+        { "<leader>oy", function() require("opencode").command("messages_copy") end, { desc = "Copy last opencode response" } },
+        { "<S-C-u>", function() require("opencode").command("messages_half_page_up") end, { desc = "Messages half page up" } },
+        { "<S-C-d>", function() require("opencode").command("messages_half_page_down") end, { desc = "Messages half page down" } },
+        { "<leader>os", function() require("opencode").select() end, { desc = "Select opencode prompt", mode = { "n", "v" } } },
+        { "<leader>oe", function() require("opencode").prompt("Explain @cursor and its context") end, { desc = "Explain this code" } },
+      },
+    },
+    {
+      "nvim-tree/nvim-web-devicons"
+    }
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
