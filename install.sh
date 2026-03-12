@@ -52,11 +52,6 @@ Darwin)
     git config --global credential.https://github.com.helper "osxkeychain"
   fi
 
-  if [ -f "$DOTFILES_DIR/common/zsh/.zshrc" ]; then
-    echo " - Symlinking .zshrc"
-    ln -sf "$DOTFILES_DIR/common/zsh/.zshrc" ~/.zshrc
-  fi
-
   # Symlink platform-specific tmux override
   echo " - Symlinking platform-specific tmux override config"
   ln -sf "$DOTFILES_DIR/mac/tmux/tmux.conf" ~/.tmux.conf.local
@@ -150,6 +145,10 @@ ln -sf "$DOTFILES_DIR/common/tmux/.tmux.conf" ~/.tmux.conf
 echo " - Setting up Starship..."
 mkdir -p ~/.config
 ln -sf "$DOTFILES_DIR/common/starship/starship.toml" ~/.config/starship.toml
+
+# Symlink Zsh configuration
+echo " - Setting up Zsh..."
+ln -sf "$DOTFILES_DIR/common/zsh/.zshrc" ~/.zshrc
 
 # Install Tmux Plugin Manager if it doesn't exist
 if [ ! -d ~/.tmux/plugins/tpm ]; then

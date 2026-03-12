@@ -11,8 +11,17 @@ setopt share_history hist_expire_dups_first hist_ignore_dups hist_verify
 # ------------------------------
 # Must be initialized early to manage PATH correctly.
 export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+if [ -d "$PYENV_ROOT" ]; then
+    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+fi
+
+# ------------------------------
+# Omarchy Environment
+# ------------------------------
+# Only source compatible aliases and envs, avoid bash-specific scripts
+[ -f ~/.local/share/omarchy/default/bash/aliases ] && source ~/.local/share/omarchy/default/bash/aliases
+[ -f ~/.local/share/omarchy/default/bash/envs ] && source ~/.local/share/omarchy/default/bash/envs
 
 # ------------------------------
 # Aliases (Shortcuts for Commands)
@@ -20,32 +29,48 @@ eval "$(pyenv init -)"
 alias vim="nvim"
 alias g="git"
 alias c='clear'
-alias ls="eza --icons --oneline --group-directories-first --sort=extension"
-alias ld="eza -lD --icons=always"
-alias lf="eza -lf --color=always --icons=always | grep -v /"
-alias lh="eza -dl .* --group-directories-first --icons=always"
-alias ll="eza -al --group-directories-first --icons=always"
-alias lt="eza -al --sort=modified --icons=always"
+# Use standard eza aliases if available, otherwise fallback to ls
+if command -v eza >/dev/null; then
+    alias ls="eza --icons --oneline --group-directories-first --sort=extension"
+    alias ld="eza -lD --icons=always"
+    alias lf="eza -lf --color=always --icons=always | grep -v /"
+    alias lh="eza -dl .* --group-directories-first --icons=always"
+    alias ll="eza -al --group-directories-first --icons=always"
+    alias lt="eza -al --sort=modified --icons=always"
+fi
 
 # ------------------------------
 # Zoxide (Smart Directory Jumper)
 # ------------------------------
-eval "$(zoxide init zsh)"
-alias cd="z"
-alias zz="z -"
-alias ..="z .."
-alias ...="z ../.."
-alias ....="z ../../.."
+if command -v zoxide >/dev/null; then
+    eval "$(zoxide init zsh)"
+    alias cd="z"
+    alias zz="z -"
+    alias ..="z .."
+    alias ...="z ../.."
+    alias ....="z ../../.."
+fi
 
 # ------------------------------
-# Oh My Posh Prompt
+# Starship Prompt
 # ------------------------------
-eval "$(oh-my-posh init zsh)"
+if command -v starship >/dev/null; then
+    eval "$(starship init zsh)"
+fi
+
+# ------------------------------
+# Oh My Posh Prompt (Fallback)
+# ------------------------------
+if command -v oh-my-posh >/dev/null; then
+    eval "$(oh-my-posh init zsh)"
+fi
 
 # ------------------------------
 # TheFuck Prompt
 # ------------------------------
-eval $(thefuck --alias)
+if command -v thefuck >/dev/null; then
+    eval $(thefuck --alias)
+fi
 
 # ------------------------------
 # Command Line Editing and Completion
@@ -54,20 +79,26 @@ eval $(thefuck --alias)
 bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
 
-# Zsh Autosuggestions should be loaded before syntax highlighting.
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# Zsh Syntax Highlighting MUST BE THE LAST THING SOURCED.
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Source Zsh plugins if they exist (Linux/macOS paths)
+for plugin in \
+    /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh \
+    /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh \
+    /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh \
+    /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+    /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+    /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+do
+    [ -f "$plugin" ] && source "$plugin"
+done
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+[ -d "$BUN_INSTALL" ] && export PATH="$BUN_INSTALL/bin:$PATH"
 
 # Added by Antigravity
-export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+[ -d "$HOME/.antigravity/antigravity/bin" ] && export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 
-. "$HOME/.local/bin/env"
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
