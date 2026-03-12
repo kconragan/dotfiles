@@ -31,5 +31,8 @@ palette = 15=#c5c9c5
 font-family = "Iosevka Term Nerd Font"
 font-size = 14
 
+# Slowdown mouse scrolling
+mouse-scroll-multiplier = 0.95
+
 # Launch Zsh by default (safest path on Omarchy)
 command = /usr/bin/zsh
