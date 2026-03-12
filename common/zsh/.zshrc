@@ -19,6 +19,9 @@ fi
 # ------------------------------
 # Omarchy Environment
 # ------------------------------
+# Prevent errors when sourcing bash-style function definitions
+unalias n 2>/dev/null
+
 # Only source compatible aliases and envs, avoid bash-specific scripts
 [ -f ~/.local/share/omarchy/default/bash/aliases ] && source ~/.local/share/omarchy/default/bash/aliases
 [ -f ~/.local/share/omarchy/default/bash/envs ] && source ~/.local/share/omarchy/default/bash/envs
