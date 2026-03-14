@@ -86,6 +86,17 @@ if command -v rg >/dev/null && command -v fzf >/dev/null; then
             rg -t "$type" "$@"
         fi
     }
+
+    # rr: Ranger-cd (syncs shell directory on exit)
+    rr() {
+        local temp_file="$(mktemp -t "ranger_cd.XXXXXX")"
+        ranger --choosedir="$temp_file" -- "${@:-$PWD}"
+        if [ -f "$temp_file" ]; then
+            local chosen_dir="$(cat "$temp_file")"
+            [ -n "$chosen_dir" ] && [ "$chosen_dir" != "$PWD" ] && cd "$chosen_dir"
+        fi
+        rm -f "$temp_file"
+    }
 fi
 
 # ------------------------------
