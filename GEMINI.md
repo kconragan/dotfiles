@@ -6,14 +6,15 @@ This repository contains personal configuration files (`dotfiles`) for **macOS**
 
 - **Purpose:** Provides a consistent, beautiful, and productive environment across different operating systems.
 - **Core Philosophy:** Automation via a single idempotent script (`install.sh`) and modular configuration.
-- **Primary Platforms:** macOS (Darwin) and Arch Linux.
+- **Primary Platforms:** macOS (Darwin) and Arch Linux (Omarchy).
 - **Key Technologies:**
-    - **Shell:** Zsh (macOS), Bash (Linux/Omarchy).
+    - **Shell:** Zsh (Primary for both), Bash (Omarchy core).
     - **Editor:** Neovim (LazyVim distribution).
     - **Terminal:** Ghostty.
     - **Multiplexer:** Tmux (with TPM).
     - **Desktop Environment:** Hyprland (Arch Linux only).
-    - **Utilities:** `zoxide`, `eza`, `starship`, `oh-my-posh`, `pyenv`, `thefuck`.
+    - **Dictation:** Voxtype (Whisper-based, Linux only).
+    - **Utilities:** `ripgrep`, `fd`, `fzf`, `zoxide`, `eza`, `starship`.
 
 ## Repository Structure
 
@@ -31,7 +32,43 @@ This repository contains personal configuration files (`dotfiles`) for **macOS**
     - `hypr/`: Hyprland and Wayland-related configurations.
     - `ghostty/`: Linux-specific Ghostty config.
     - `tmux/`: Linux-specific Tmux overrides.
+    - `voxtype/`: Voxtype dictation settings.
     - `.bashrc`: Linux-specific Bash configuration.
+
+## Key Bindings & Shortcuts (Corne Optimized)
+
+### Tmux (Common)
+- **Prefix:** `C-Space` (Ctrl + Space).
+- **Tabs (Windows):**
+    - `Prefix + t`: New Tab.
+    - `Prefix + r`: Rename Tab.
+    - `Alt + 1-9`: Switch to Tab directly.
+    - `Prefix + X`: Kill Tab.
+- **Splits (Panes):**
+    - `Prefix + |`: Vertical Split.
+    - `Prefix + =`: Horizontal Split.
+    - `Prefix + x`: Kill Split.
+    - `Prefix + Shift + H/J/K/L`: Resize Split (5 units).
+- **Navigation:** `C-h/j/k/l` to move between splits (including Neovim).
+
+### Hyprland (Linux)
+- **Navigation:**
+    - `SUPER + H/J/K/L`: Move window focus (Vim-style).
+    - `SUPER + SHIFT + H/L`: Switch workspace (Cycle).
+    - `SUPER + CTRL + H/L`: Move window to workspace (Cycle).
+- **Tools:**
+    - `SUPER + SHIFT + S`: Screenshot to clipboard (smart select).
+    - `SUPER + SHIFT + N`: Toggle Night Shift (Omarchy).
+    - `SUPER + SHIFT + M`: Omarchy Menu.
+- **Dictation:** `Thumb Key (F13)`: Push-to-Talk (Voxtype).
+
+### Shell (Zsh - Common)
+- **Search QoL:**
+    - `rgc <query>`: Ripgrep with 2 lines of context.
+    - `fif`: Interactive "Find In File" (rg -> fzf -> nvim).
+    - `fda <name>`: Find all (including hidden/ignored).
+    - `fzp`: Fuzzy Jump to directory (with eza tree preview).
+    - `rgt`: Interactive ripgrep filter by file type.
 
 ## Installation & Setup
 
