@@ -105,6 +105,11 @@ Linux)
   mkdir -p ~/.config/ghostty
   ln -sf "$DOTFILES_DIR/linux/ghostty/config" ~/.config/ghostty/config
 
+  # Symlink voxtype config
+  echo " - Symlinking voxtype config"
+  mkdir -p ~/.config/voxtype
+  ln -sf "$DOTFILES_DIR/linux/voxtype/config.toml" ~/.config/voxtype/config.toml
+
   # Symlink Hyprland configuration
   echo " - Setting up Hyprland..."
   mkdir -p ~/.config/hypr
