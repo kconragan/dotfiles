@@ -110,6 +110,11 @@ Linux)
   mkdir -p ~/.config/voxtype
   ln -sf "$DOTFILES_DIR/linux/voxtype/config.toml" ~/.config/voxtype/config.toml
 
+  # Symlink walker config
+  echo " - Symlinking walker config"
+  mkdir -p ~/.config/walker
+  ln -sf "$DOTFILES_DIR/linux/walker/config.toml" ~/.config/walker/config.toml
+
   # Symlink Hyprland configuration
   echo " - Setting up Hyprland..."
   mkdir -p ~/.config/hypr
