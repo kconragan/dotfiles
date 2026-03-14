@@ -47,6 +47,12 @@ if [ -n "$ZSH_VERSION" ]; then
     alias vim="nvim"
     alias g="git"
     alias c='clear'
+    
+    # VPN Control Aliases
+    alias vpn-up='sudo systemctl start wg-quick@wg-US-CA-813.service'
+    alias vpn-down='sudo systemctl stop wg-quick@wg-US-CA-813.service'
+    alias vpn-status='systemctl status wg-quick@wg-US-CA-813.service'
+
     # Use standard eza aliases if available, otherwise fallback to ls
     if command -v eza >/dev/null; then
         alias ls="eza --icons --oneline --group-directories-first --sort=extension"
@@ -56,6 +62,61 @@ if [ -n "$ZSH_VERSION" ]; then
         alias ll="eza -al --group-directories-first --icons=always"
         alias lt="eza -al --sort=modified --icons=always"
     fi
+
+    # ------------------------------
+    # Functions
+    # ------------------------------
+    whatsmyip() {
+        # Use color codes for output
+        local green='\033[0;32m'
+        local red='\033[0;31m'
+        local nc='\033[0m' # No Color
+
+        local active_interface=""
+        local lan_interface=""
+        local internal_ip=""
+        local is_connected=false
+
+        # --- VPN Status Check by Handshake AGE ---
+        if command -v wg >/dev/null; then
+            local wg_interface
+            wg_interface=$(sudo wg show 2>/dev/null | grep 'interface:' | awk '{print $2}')
+            if [[ -n "$wg_interface" ]]; then
+                local handshake_epoch
+                handshake_epoch=$(sudo wg show "$wg_interface" latest-handshakes | awk '{print $2}')
+                if [[ -n "$handshake_epoch" && "$handshake_epoch" =~ ^[0-9]+$ ]]; then
+                    local current_epoch=$(date +%s)
+                    local age=$((current_epoch - handshake_epoch))
+                    if [[ "$age" -lt 180 ]]; then
+                        is_connected=true
+                        active_interface=$wg_interface
+                    fi
+                fi
+            fi
+        fi
+
+        # --- Output Section ---
+        if [[ "$is_connected" == true ]]; then
+            echo -e "VPN Status: ${green}🟢 Connected${nc} (via ${active_interface})"
+        else
+            echo -e "VPN Status: ${red}🔴 Disconnected${nc}"
+        fi
+
+        if command -v ip >/dev/null; then
+            lan_interface=$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -n1)
+            if [[ -n "$lan_interface" ]]; then
+                internal_ip=$(ip addr show "$lan_interface" | grep "inet " | awk '{print $2}' | cut -d/ -f1)
+                echo "Internal IP ($lan_interface): $internal_ip"
+            fi
+        fi
+
+        if [[ "$is_connected" == true ]]; then
+            echo -n "External IP (VPN): "
+        else
+            echo -n "External IP (ISP): "
+        fi
+        curl -s -4 ifconfig.me && echo ""
+    }
 
     # ------------------------------
     # Search Aliases (rg, fd, fzf)
