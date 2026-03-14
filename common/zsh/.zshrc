@@ -90,6 +90,11 @@ if command -v rg >/dev/null && command -v fzf >/dev/null; then
         fi
     }
 
+    # yayf: Fuzzy find and install Arch packages using yay
+    if command -v yay >/dev/null; then
+        alias yayf="yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=down:75% | xargs -ro yay -S"
+    fi
+
     # rr: Ranger-cd (syncs shell directory on exit)
     rr() {
         local temp_file="$(mktemp -t "ranger_cd.XXXXXX")"
