@@ -26,6 +26,11 @@ local groups = {
 	"TelescopeNormal",
 	"TelescopePromptBorder",
 	"TelescopePromptTitle",
+	-- snacks
+	"SnacksNormal",
+	"SnacksNormalNC",
+	"SnacksTerminal",
+	"SnacksTerminalNC",
 	-- neotree
 	"NeoTreeNormal",
 	"NeoTreeNormalNC",
