@@ -1,6 +1,8 @@
-# ------------------------------
-# History Configuration
-# ------------------------------
+# Only execute if we are in Zsh
+if [ -n "$ZSH_VERSION" ]; then
+    # ------------------------------
+    # History Configuration
+    # ------------------------------
 HISTFILE=$HOME/.zhistory
 SAVEHIST=1000
 HISTSIZE=999
@@ -162,3 +164,4 @@ export BUN_INSTALL="$HOME/.bun"
 [ -d "$HOME/.antigravity/antigravity/bin" ] && export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+fi
