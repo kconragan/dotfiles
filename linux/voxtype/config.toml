@@ -11,10 +11,9 @@
 state_file = "auto"
 
 [hotkey]
-# Hotkey is configured in Hyprland. Default is Super + Ctrl + X
 enabled = true
 key = "F13"
-mode = "PushToTalk"
+mode = "push_to_talk"
 
 [audio]
 # Audio input device ("default" uses system default)
@@ -30,8 +29,6 @@ max_duration_secs = 60
 # [audio.feedback]
 # Enable audio feedback sounds (beeps when recording starts/stops)
 # enabled = true
-key = "F13"
-mode = "PushToTalk"
 #
 # Sound theme: "default", "subtle", "mechanical", or path to custom theme directory
 # theme = "default"
