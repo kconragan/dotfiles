@@ -155,6 +155,11 @@ ln -sf "$DOTFILES_DIR/common/starship/starship.toml" ~/.config/starship.toml
 echo " - Setting up Zsh..."
 ln -sf "$DOTFILES_DIR/common/zsh/.zshrc" ~/.zshrc
 
+# Symlink Glow configuration
+echo " - Setting up Glow..."
+mkdir -p ~/.config/glow
+ln -sf "$DOTFILES_DIR/common/glow/glow.yml" ~/.config/glow/glow.yml
+
 # Install Tmux Plugin Manager if it doesn't exist
 if [ ! -d ~/.tmux/plugins/tpm ]; then
   echo " - Installing Tmux Plugin Manager..."
