@@ -43,6 +43,52 @@ if command -v eza >/dev/null; then
 fi
 
 # ------------------------------
+# Search Aliases (rg, fd, fzf)
+# ------------------------------
+if command -v rg >/dev/null && command -v fzf >/dev/null; then
+    # rgc: Ripgrep with 2 lines of context and line numbers
+    alias rgc='rg -C 2 --line-number --sort path'
+
+    # fda: fd find all (including hidden and ignored files)
+    alias fda='fd -H -I'
+
+    # fif: Find In File - Interactive Ripgrep + FZF + Bat preview -> Neovim
+    # Uses single quotes for the glob to prevent Zsh history expansion (!)
+    fif() {
+        local file_info
+        file_info=$(rg --line-number --column --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob '!.git/*' "" | \
+            fzf --ansi --delimiter : \
+                --preview "bat --style=numbers --color=always --highlight-line {2} {1}" \
+                --preview-window +{2}-/2)
+        
+        if [[ -n "$file_info" ]]; then
+            local file=$(echo "$file_info" | awk -F: '{print $1}')
+            local line=$(echo "$file_info" | awk -F: '{print $2}')
+            nvim "+$line" "$file"
+        fi
+    }
+
+    # fzp: Fuzzy Jump to directory with eza tree preview
+    fzp() {
+        local dir
+        dir=$(fd -t d | fzf --preview "eza -T --color=always --icons {} | head -20")
+        if [[ -n "$dir" ]]; then
+            cd "$dir"
+        fi
+    }
+
+    # rgt: Filter ripgrep by file type (interactive selection)
+    rgt() {
+        local type
+        type=$(rg --type-list | awk -F: '{print $1}' | fzf --header "Select File Type")
+        if [[ -n "$type" ]]; then
+            echo "Searching in $type files..."
+            rg -t "$type" "$@"
+        fi
+    }
+fi
+
+# ------------------------------
 # Zoxide (Smart Directory Jumper)
 # ------------------------------
 if command -v zoxide >/dev/null; then
