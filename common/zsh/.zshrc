@@ -23,6 +23,7 @@ fi
 # ------------------------------
 # Prevent errors when sourcing bash-style function definitions
 unalias n 2>/dev/null
+unalias r 2>/dev/null
 
 # Only source compatible aliases and envs, avoid bash-specific scripts
 [ -f ~/.local/share/omarchy/default/bash/aliases ] && source ~/.local/share/omarchy/default/bash/aliases
