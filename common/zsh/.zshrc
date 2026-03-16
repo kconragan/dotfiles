@@ -19,7 +19,6 @@ if [ -n "$ZSH_VERSION" ]; then
     # ------------------------------
     # History Configuration
     # ------------------------------
-    # Note: Omarchy might set these, but we ensure our preferences here
     HISTFILE=$HOME/.zhistory
     SAVEHIST=1000
     HISTSIZE=999
@@ -37,7 +36,6 @@ if [ -n "$ZSH_VERSION" ]; then
     # ------------------------------
     # Omarchy Environment Overrides
     # ------------------------------
-    # Prevent errors when sourcing bash-style function definitions
     unalias n 2>/dev/null
     unalias r 2>/dev/null
 
@@ -67,27 +65,19 @@ if [ -n "$ZSH_VERSION" ]; then
     # Functions
     # ------------------------------
     whatsmyip() {
-        # Use color codes for output
         local green='\033[0;32m'
         local red='\033[0;31m'
-        local nc='\033[0m' # No Color
-
-        local active_interface=""
-        local lan_interface=""
-        local internal_ip=""
+        local nc='\033[0m'
         local is_connected=false
+        local active_interface=""
 
-        # --- VPN Status Check by Handshake AGE ---
         if command -v wg >/dev/null; then
-            local wg_interface
-            wg_interface=$(sudo wg show 2>/dev/null | grep 'interface:' | awk '{print $2}')
+            local wg_interface=$(sudo wg show 2>/dev/null | grep 'interface:' | awk '{print $2}')
             if [[ -n "$wg_interface" ]]; then
-                local handshake_epoch
-                handshake_epoch=$(sudo wg show "$wg_interface" latest-handshakes | awk '{print $2}')
+                local handshake_epoch=$(sudo wg show "$wg_interface" latest-handshakes | awk '{print $2}')
                 if [[ -n "$handshake_epoch" && "$handshake_epoch" =~ ^[0-9]+$ ]]; then
                     local current_epoch=$(date +%s)
-                    local age=$((current_epoch - handshake_epoch))
-                    if [[ "$age" -lt 180 ]]; then
+                    if [[ $((current_epoch - handshake_epoch)) -lt 180 ]]; then
                         is_connected=true
                         active_interface=$wg_interface
                     fi
@@ -95,7 +85,6 @@ if [ -n "$ZSH_VERSION" ]; then
             fi
         fi
 
-        # --- Output Section ---
         if [[ "$is_connected" == true ]]; then
             echo -e "VPN Status: ${green}🟢 Connected${nc} (via ${active_interface})"
         else
@@ -103,18 +92,11 @@ if [ -n "$ZSH_VERSION" ]; then
         fi
 
         if command -v ip >/dev/null; then
-            lan_interface=$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -n1)
-            if [[ -n "$lan_interface" ]]; then
-                internal_ip=$(ip addr show "$lan_interface" | grep "inet " | awk '{print $2}' | cut -d/ -f1)
-                echo "Internal IP ($lan_interface): $internal_ip"
-            fi
+            local lan_interface=$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -n1)
+            [[ -n "$lan_interface" ]] && echo "Internal IP ($lan_interface): $(ip addr show "$lan_interface" | grep "inet " | awk '{print $2}' | cut -d/ -f1)"
         fi
 
-        if [[ "$is_connected" == true ]]; then
-            echo -n "External IP (VPN): "
-        else
-            echo -n "External IP (ISP): "
-        fi
+        echo -n "External IP ($( [[ "$is_connected" == true ]] && echo "VPN" || echo "ISP" )): "
         curl -s -4 ifconfig.me && echo ""
     }
 
@@ -122,55 +104,25 @@ if [ -n "$ZSH_VERSION" ]; then
     # Search Aliases (rg, fd, fzf)
     # ------------------------------
     if command -v rg >/dev/null && command -v fzf >/dev/null; then
-        # rgc: Ripgrep with 2 lines of context and line numbers
         alias rgc='rg -C 2 --line-number --sort path'
-
-        # fda: fd find all (including hidden and ignored files)
         alias fda='fd -H -I'
 
-        # fif: Find In File - Interactive Ripgrep + FZF + Bat preview -> Neovim
         fif() {
-            local file_info
-            file_info=$(rg --line-number --column --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob '!.git/*' "" | \
-                fzf --ansi --delimiter : \
-                    --preview "bat --style=numbers --color=always --highlight-line {2} {1}" \
-                    --preview-window +{2}-/2)
-            
+            local file_info=$(rg --line-number --column --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob '!.git/*' "" | \
+                fzf --ansi --delimiter : --preview "bat --style=numbers --color=always --highlight-line {2} {1}" --preview-window +{2}-/2)
             if [[ -n "$file_info" ]]; then
-                local file=$(echo "$file_info" | awk -F: '{print $1}')
-                local line=$(echo "$file_info" | awk -F: '{print $2}')
-                nvim "+$line" "$file"
+                nvim "+$(echo "$file_info" | awk -F: '{print $2}')" "$(echo "$file_info" | awk -F: '{print $1}')"
             fi
         }
 
-        # fzp: Fuzzy Jump to directory with eza tree preview
         fzp() {
-            local dir
-            dir=$(fd -t d | fzf --preview "eza -T --color=always --icons {} | head -20")
-            if [[ -n "$dir" ]]; then
-                cd "$dir"
-            fi
+            local dir=$(fd -t d | fzf --preview "eza -T --color=always --icons {} | head -20")
+            [[ -n "$dir" ]] && cd "$dir"
         }
 
-        # rgt: Filter ripgrep by file type (interactive selection)
         rgt() {
-            local type
-            type=$(rg --type-list | awk -F: '{print $1}' | fzf --header "Select File Type")
-            if [[ -n "$type" ]]; then
-                echo "Searching in $type files..."
-                rg -t "$type" "$@"
-            fi
-        }
-
-        # rr: Ranger-cd (syncs shell directory on exit)
-        rr() {
-            local temp_file="$(mktemp -t "ranger_cd.XXXXXX")"
-            ranger --choosedir="$temp_file" -- "${@:-$PWD}"
-            if [ -f "$temp_file" ]; then
-                local chosen_dir="$(cat "$temp_file")"
-                [ -n "$chosen_dir" ] && [ "$chosen_dir" != "$PWD" ] && cd "$chosen_dir"
-            fi
-            rm -f "$temp_file"
+            local type=$(rg --type-list | awk -F: '{print $1}' | fzf --header "Select File Type")
+            [[ -n "$type" ]] && echo "Searching in $type files..." && rg -t "$type" "$@"
         }
 
         # yayf: Fuzzy find and install Arch packages using yay
@@ -179,47 +131,50 @@ if [ -n "$ZSH_VERSION" ]; then
         fi
     fi
 
+    # rr: Ranger-cd (syncs shell directory on exit)
+    rr() {
+        local temp_file="$(mktemp -t "ranger_cd.XXXXXX")"
+        ranger --choosedir="$temp_file" -- "${@:-$PWD}"
+        if [ -f "$temp_file" ]; then
+            local chosen_dir="$(cat "$temp_file")"
+            [ -n "$chosen_dir" ] && [ "$chosen_dir" != "$PWD" ] && cd "$chosen_dir"
+        fi
+        rm -f "$temp_file"
+    }
+
+    # ts: Tmux-Setup (creates a project workspace with 4 standard tabs)
+    ts() {
+        local session_name="${1:-$(basename "$PWD" | tr '.' '_')}"
+        if ! tmux has-session -t "$session_name" 2>/dev/null; then
+            tmux new-session -d -s "$session_name" -n "shell"
+            tmux new-window -t "$session_name:2" -n "nvim"
+            tmux new-window -t "$session_name:3" -n "agent"
+            tmux new-window -t "$session_name:4" -n "server"
+            tmux select-window -t "$session_name:1"
+        fi
+        tmux attach -t "$session_name"
+    }
+
     # ------------------------------
-    # Zoxide (Smart Directory Jumper)
+    # Tool Initializations
     # ------------------------------
     if command -v zoxide >/dev/null; then
         eval "$(zoxide init zsh)" 2>/dev/null
         alias cd="z"
-        alias zz="z -"
         alias ..="z .."
         alias ...="z ../.."
-        alias ....="z ../../.."
     fi
 
-    # ------------------------------
-    # Starship Prompt
-    # ------------------------------
-    if command -v starship >/dev/null; then
-        eval "$(starship init zsh)"
-    fi
+    command -v starship >/dev/null && eval "$(starship init zsh)"
+    command -v oh-my-posh >/dev/null && eval "$(oh-my-posh init zsh)"
+    command -v thefuck >/dev/null && eval $(thefuck --alias)
 
     # ------------------------------
-    # Oh My Posh Prompt (Fallback)
+    # Completion & Plugins
     # ------------------------------
-    if command -v oh-my-posh >/dev/null; then
-        eval "$(oh-my-posh init zsh)"
-    fi
-
-    # ------------------------------
-    # TheFuck Prompt
-    # ------------------------------
-    if command -v thefuck >/dev/null; then
-        eval $(thefuck --alias)
-    fi
-
-    # ------------------------------
-    # Command Line Editing and Completion
-    # ------------------------------
-    # Plugins must be sourced at the end of the file.
     bindkey '^[[A' history-search-backward 2>/dev/null
     bindkey '^[[B' history-search-forward 2>/dev/null
 
-    # Source Zsh plugins if they exist (Linux/macOS paths)
     for plugin in \
         /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh \
         /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh \
@@ -231,16 +186,10 @@ if [ -n "$ZSH_VERSION" ]; then
         [ -f "$plugin" ] && source "$plugin"
     done
 
-    # bun completions
     [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
-
-    # bun
     export BUN_INSTALL="$HOME/.bun"
     [ -d "$BUN_INSTALL" ] && export PATH="$BUN_INSTALL/bin:$PATH"
-
-    # Added by Antigravity
     [ -d "$HOME/.antigravity/antigravity/bin" ] && export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
-
     [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 fi
 
