@@ -1,5 +1,6 @@
 name: website
-root: ~/Code/github.com/conragan/Portfolio
+root: ~/Code/github.com/conragan
+startup_window: editor
 
 windows:
   - shell: ""
@@ -7,5 +8,8 @@ windows:
       layout: main-vertical
       panes:
         - nvim .
-        - opencode
+        - claude
   - server: ""
+
+# Resize the main editor pane to 70% of the screen (leaving 30% for claude)
+post: tmux resize-pane -t website:editor.1 -x 70%
