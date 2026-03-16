@@ -142,19 +142,6 @@ if [ -n "$ZSH_VERSION" ]; then
         rm -f "$temp_file"
     }
 
-    # ts: Tmux-Setup (creates a project workspace with 4 standard tabs)
-    ts() {
-        local session_name="${1:-$(basename "$PWD" | tr '.' '_')}"
-        if ! tmux has-session -t "$session_name" 2>/dev/null; then
-            tmux new-session -d -s "$session_name" -n "shell"
-            tmux new-window -t "$session_name:2" -n "nvim"
-            tmux new-window -t "$session_name:3" -n "agent"
-            tmux new-window -t "$session_name:4" -n "server"
-            tmux select-window -t "$session_name:1"
-        fi
-        tmux attach -t "$session_name"
-    }
-
     # ------------------------------
     # Tool Initializations
     # ------------------------------
@@ -165,7 +152,11 @@ if [ -n "$ZSH_VERSION" ]; then
         alias ...="z ../.."
     fi
 
+    # Initialize mise (Modern replacement for asdf/nvm/pyenv)
+    command -v mise >/dev/null && eval "$(mise activate zsh)" 2>/dev/null
+
     command -v starship >/dev/null && eval "$(starship init zsh)"
+
     command -v oh-my-posh >/dev/null && eval "$(oh-my-posh init zsh)"
     command -v thefuck >/dev/null && eval $(thefuck --alias)
 
