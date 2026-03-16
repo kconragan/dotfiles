@@ -243,3 +243,8 @@ if [ -n "$ZSH_VERSION" ]; then
 
     [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 fi
+
+# Display system splash screen
+if [[ $- == *i* ]] && command -v fastfetch >/dev/null; then
+    fastfetch
+fi
