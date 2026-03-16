@@ -1,0 +1,19 @@
+# Node.js artifacts
+node_modules/
+package-lock.json
+npm-debug.log*
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.class
+venv/
+.venv/
+
+# System artifacts
+.DS_Store
+Thumbs.db
+
+# App-specific caches
+.cache/
+.local/state/
