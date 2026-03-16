@@ -165,6 +165,16 @@ echo " - Setting up Glow..."
 mkdir -p ~/.config/glow
 ln -sf "$DOTFILES_DIR/common/glow/glow.yml" ~/.config/glow/glow.yml
 
+# Symlink Tmuxinator configuration
+echo " - Setting up Tmuxinator..."
+mkdir -p ~/.config/tmuxinator
+for config_file in "$DOTFILES_DIR"/common/tmuxinator/*.yml; do
+  if [ -f "$config_file" ]; then
+    target_name=$(basename "$config_file")
+    ln -sf "$config_file" ~/.config/tmuxinator/"$target_name"
+  fi
+done
+
 # Install Tmux Plugin Manager if it doesn't exist
 if [ ! -d ~/.tmux/plugins/tpm ]; then
   echo " - Installing Tmux Plugin Manager..."

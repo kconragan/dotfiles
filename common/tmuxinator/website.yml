@@ -1,0 +1,11 @@
+name: website
+root: ~/Code/github.com/conragan/Portfolio
+
+windows:
+  - shell: ""
+  - editor:
+      layout: main-vertical
+      panes:
+        - nvim .
+        - opencode
+  - server: ""
