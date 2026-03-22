@@ -17,3 +17,6 @@ Thumbs.db
 # App-specific caches
 .cache/
 .local/state/
+
+# Claude skill runtime state — machine-specific, not config
+common/claude/skills/**/meta.json

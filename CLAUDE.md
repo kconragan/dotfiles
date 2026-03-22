@@ -28,6 +28,7 @@ Symlink targets:
 | `common/tmux/.tmux.conf` | `~/.tmux.conf` |
 | `common/starship/starship.toml` | `~/.config/starship.toml` |
 | `common/zsh/.zshrc` | `~/.zshrc` |
+| `common/claude/skills/<skill>/` | `~/.claude/skills/<skill>` (one symlink per skill) |
 | `mac/tmux/tmux.conf` | `~/.tmux.conf.local` |
 | `mac/ghostty/config` | `~/.config/ghostty/config` |
 
@@ -60,6 +61,21 @@ Built on **LazyVim** (`common/nvim/`). Key layout:
 5. zsh-syntax-highlighting (must be last)
 
 `cd` is aliased to `z` (zoxide). `vim` is aliased to `nvim`.
+
+## Claude Skills
+
+`common/claude/skills/` contains Claude Code writing skills. Each skill is a directory symlinked individually into `~/.claude/skills/` by install.sh.
+
+Current skills:
+- `voice-of-kai/` — Universal voice reference (`voice-of-kai.md`) and banned phrases (`voice-antipatterns.md`). Not a skill itself — loaded as context by the register skills.
+- `voice-review/` — Meta-skill that reviews accumulated voice feedback and proposes updates to the voice documents.
+- `kai-professional-writing/` — Portfolio, bio, LinkedIn, executive communications.
+- `kai-reflective-writing/` — Essays, opinion, travel writing, journal, links.
+- `kai-technical-writing/` — TIL posts, tutorials, code walkthroughs.
+
+All register skills inherit from `voice-of-kai/voice-of-kai.md` and share `voice-of-kai/voice-antipatterns.md`.
+
+To add a new skill: create a directory in `common/claude/skills/<skill-name>/` with a `SKILL.md`. Re-run install.sh to symlink it.
 
 ## Git Config
 

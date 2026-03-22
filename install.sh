@@ -143,6 +143,16 @@ echo " - Setting up Neovim..."
 mkdir -p ~/.config
 ln -sf "$DOTFILES_DIR/common/nvim" ~/.config/nvim
 
+# Purge architecture-specific binaries to prevent cross-platform crashes
+# This forces nvim-treesitter to recompile parsers for the current OS
+if [ -d ~/.local/share/nvim/site/parser ]; then
+  echo " - Cleaning up incompatible Neovim binaries..."
+  rm -rf ~/.local/share/nvim/site/parser/*.so
+fi
+if [ -d ~/.local/share/nvim/lazy/nvim-treesitter/parser ]; then
+  rm -rf ~/.local/share/nvim/lazy/nvim-treesitter/parser/*.so
+fi
+
 # Symlink gitconfig
 echo " - Setting up git..."
 ln -sf "$DOTFILES_DIR/common/.gitconfig" ~/.gitconfig
@@ -172,6 +182,16 @@ for config_file in "$DOTFILES_DIR"/common/tmuxinator/*.yml; do
   if [ -f "$config_file" ]; then
     target_name=$(basename "$config_file")
     ln -sf "$config_file" ~/.config/tmuxinator/"$target_name"
+  fi
+done
+
+# Symlink Claude Code skills
+echo " - Setting up Claude skills..."
+mkdir -p ~/.claude/skills
+for skill_dir in "$DOTFILES_DIR/common/claude/skills"/*/; do
+  if [ -d "$skill_dir" ]; then
+    skill_name=$(basename "$skill_dir")
+    ln -sf "${skill_dir%/}" ~/.claude/skills/"$skill_name"
   fi
 done
 
