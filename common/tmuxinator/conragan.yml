@@ -1,0 +1,14 @@
+# ~/.config/tmuxinator/conragan.yml
+
+name: conragan
+root: ~/Code/github.com/conragan
+
+windows:
+  - shell: git status
+  - editor:
+      layout: main-vertical
+      main-pane-width: 70
+      panes:
+        - nvim .
+        - claude
+  - server: npm run dev

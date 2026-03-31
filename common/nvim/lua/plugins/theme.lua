@@ -16,15 +16,15 @@ else
   -- If the file does not exist (we are on macOS):
   -- Specify preferred theme here
   return {
-    "rebelot/kanagawa.nvim",
+    "sainnhe/everforest",
     lazy = false,
     priority = 1000,
-    opts = { theme = "dragon" },
-    config = function(_, opts)
-      require("kanagawa").setup({
-        theme = opts.theme,
-      })
-      vim.cmd("colorscheme kanagawa")
+    config = function()
+      -- Everforest configuration options (optional)
+      -- vim.g.everforest_background = "soft"
+      -- vim.g.everforest_better_performance = 1
+
+      vim.cmd("colorscheme everforest")
     end,
   }
 end
