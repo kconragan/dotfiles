@@ -54,12 +54,12 @@ Darwin)
 
   # Symlink platform-specific tmux override
   echo " - Symlinking platform-specific tmux override config"
-  ln -sf "$DOTFILES_DIR/mac/tmux/tmux.conf" ~/.tmux.conf.local
+  ln -sfn "$DOTFILES_DIR/mac/tmux/tmux.conf" ~/.tmux.conf.local
 
   # Symlink platform-specific Ghostty config
   echo " - Symlinking platform-specific Ghostty config"
   mkdir -p ~/.config/ghostty
-  ln -sf "$DOTFILES_DIR/mac/ghostty/config" ~/.config/ghostty/config
+  ln -sfn "$DOTFILES_DIR/mac/ghostty/config" ~/.config/ghostty/config
   ;;
 
 Linux)
@@ -93,27 +93,27 @@ Linux)
 
   if [ -f "$DOTFILES_DIR/linux/.bashrc" ]; then
     echo " - Symlinking platform-specific .bashrc"
-    ln -sf "$DOTFILES_DIR/linux/.bashrc" ~/.bashrc
+    ln -sfn "$DOTFILES_DIR/linux/.bashrc" ~/.bashrc
   fi
 
   # Symlink platform-specific tmux override
   echo " - Symlinking platform-specific tmux override config"
-  ln -sf "$DOTFILES_DIR/linux/tmux/tmux.conf" ~/.tmux.conf.local
+  ln -sfn "$DOTFILES_DIR/linux/tmux/tmux.conf" ~/.tmux.conf.local
 
   # Symlink platform-specific Ghostty config
   echo " - Symlinking platform-specific Ghostty config"
   mkdir -p ~/.config/ghostty
-  ln -sf "$DOTFILES_DIR/linux/ghostty/config" ~/.config/ghostty/config
+  ln -sfn "$DOTFILES_DIR/linux/ghostty/config" ~/.config/ghostty/config
 
   # Symlink voxtype config
   echo " - Symlinking voxtype config"
   mkdir -p ~/.config/voxtype
-  ln -sf "$DOTFILES_DIR/linux/voxtype/config.toml" ~/.config/voxtype/config.toml
+  ln -sfn "$DOTFILES_DIR/linux/voxtype/config.toml" ~/.config/voxtype/config.toml
 
   # Symlink walker config
   echo " - Symlinking walker config"
   mkdir -p ~/.config/walker
-  ln -sf "$DOTFILES_DIR/linux/walker/config.toml" ~/.config/walker/config.toml
+  ln -sfn "$DOTFILES_DIR/linux/walker/config.toml" ~/.config/walker/config.toml
 
   # Symlink Hyprland configuration
   echo " - Setting up Hyprland..."
@@ -124,7 +124,7 @@ Linux)
     if [ -f "$config_file" ]; then
       target_name=$(basename "$config_file")
       echo "   - Symlinking $target_name"
-      ln -sf "$config_file" ~/.config/hypr/"$target_name"
+      ln -sfn "$config_file" ~/.config/hypr/"$target_name"
     fi
   done
   ;;
@@ -141,7 +141,7 @@ echo "Installing common dotfiles..."
 # Symlink Neovim configuration
 echo " - Setting up Neovim..."
 mkdir -p ~/.config
-ln -sf "$DOTFILES_DIR/common/nvim" ~/.config/nvim
+ln -sfn "$DOTFILES_DIR/common/nvim" ~/.config/nvim
 
 # Purge architecture-specific binaries to prevent cross-platform crashes
 # This forces nvim-treesitter to recompile parsers for the current OS
@@ -155,25 +155,25 @@ fi
 
 # Symlink gitconfig
 echo " - Setting up git..."
-ln -sf "$DOTFILES_DIR/common/.gitconfig" ~/.gitconfig
+ln -sfn "$DOTFILES_DIR/common/.gitconfig" ~/.gitconfig
 
 # Symlink main tmux config
 echo " - Setting up tmux..."
-ln -sf "$DOTFILES_DIR/common/tmux/.tmux.conf" ~/.tmux.conf
+ln -sfn "$DOTFILES_DIR/common/tmux/.tmux.conf" ~/.tmux.conf
 
 # Symlink Starship configuration
 echo " - Setting up Starship..."
 mkdir -p ~/.config
-ln -sf "$DOTFILES_DIR/common/starship/starship.toml" ~/.config/starship.toml
+ln -sfn "$DOTFILES_DIR/common/starship/starship.toml" ~/.config/starship.toml
 
 # Symlink Zsh configuration
 echo " - Setting up Zsh..."
-ln -sf "$DOTFILES_DIR/common/zsh/.zshrc" ~/.zshrc
+ln -sfn "$DOTFILES_DIR/common/zsh/.zshrc" ~/.zshrc
 
 # Symlink Glow configuration
 echo " - Setting up Glow..."
 mkdir -p ~/.config/glow
-ln -sf "$DOTFILES_DIR/common/glow/glow.yml" ~/.config/glow/glow.yml
+ln -sfn "$DOTFILES_DIR/common/glow/glow.yml" ~/.config/glow/glow.yml
 
 # Symlink Tmuxinator configuration
 echo " - Setting up Tmuxinator..."
@@ -181,7 +181,7 @@ mkdir -p ~/.config/tmuxinator
 for config_file in "$DOTFILES_DIR"/common/tmuxinator/*.yml; do
   if [ -f "$config_file" ]; then
     target_name=$(basename "$config_file")
-    ln -sf "$config_file" ~/.config/tmuxinator/"$target_name"
+    ln -sfn "$config_file" ~/.config/tmuxinator/"$target_name"
   fi
 done
 
@@ -191,7 +191,7 @@ mkdir -p ~/.claude/skills
 for skill_dir in "$DOTFILES_DIR/common/claude/skills"/*/; do
   if [ -d "$skill_dir" ]; then
     skill_name=$(basename "$skill_dir")
-    ln -sf "${skill_dir%/}" ~/.claude/skills/"$skill_name"
+    ln -sfn "${skill_dir%/}" ~/.claude/skills/"$skill_name"
   fi
 done
 
