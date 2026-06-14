@@ -185,6 +185,11 @@ for config_file in "$DOTFILES_DIR"/common/tmuxinator/*.yml; do
   fi
 done
 
+# Symlink global Claude Code configuration
+echo " - Setting up Claude global config..."
+mkdir -p ~/.claude
+ln -sfn "$DOTFILES_DIR/common/claude/CLAUDE.md" ~/.claude/CLAUDE.md
+
 # Symlink Claude Code skills
 echo " - Setting up Claude skills..."
 mkdir -p ~/.claude/skills

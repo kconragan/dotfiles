@@ -76,18 +76,27 @@ All fzf functions live inside `if command -v fzf` and require fzf to be installe
 | `rgt` | Fuzzy select rg file type, then search |
 | `yayf` | Fuzzy Arch package install via yay (Linux only) |
 
-## Claude Skills
+## Claude Configuration
 
-`common/claude/skills/` contains Claude Code writing skills. Each skill is a directory symlinked individually into `~/.claude/skills/` by install.sh.
+### Global CLAUDE.md
+
+`common/claude/CLAUDE.md` is symlinked to `~/.claude/CLAUDE.md` by install.sh. It contains Karpathy's 4 behavioral principles (think before coding, simplicity first, surgical changes, goal-driven execution) plus personal context: identity, communication preferences, tool preferences, and what to avoid.
+
+Project-specific `CLAUDE.md` files extend this — they don't replace it.
+
+### Skills
+
+`common/claude/skills/` contains Claude Code skills. Each skill is a directory symlinked individually into `~/.claude/skills/` by install.sh.
 
 Current skills:
-- `voice-of-kai/` — Universal voice reference (`voice-of-kai.md`) and banned phrases (`voice-antipatterns.md`). Not a skill itself — loaded as context by the register skills.
-- `voice-review/` — Meta-skill that reviews accumulated voice feedback and proposes updates to the voice documents.
+- `voice-of-kai/` — Universal voice reference and banned phrases. Loaded as context by the writing skills, not invoked directly.
+- `voice-review/` — Reviews accumulated voice feedback and proposes updates to the voice documents.
 - `kai-professional-writing/` — Portfolio, bio, LinkedIn, executive communications.
 - `kai-reflective-writing/` — Essays, opinion, travel writing, journal, links.
 - `kai-technical-writing/` — TIL posts, tutorials, code walkthroughs.
+- `kai-working-style/` — Standing collaboration context. Process, not output. Auto-triggers on any problem-solving or building session.
 
-All register skills inherit from `voice-of-kai/voice-of-kai.md` and share `voice-of-kai/voice-antipatterns.md`.
+Writing skills inherit from `voice-of-kai/`. `kai-working-style` is independent — it governs how to work, not how to write.
 
 To add a new skill: create a directory in `common/claude/skills/<skill-name>/` with a `SKILL.md`. Re-run install.sh to symlink it.
 
