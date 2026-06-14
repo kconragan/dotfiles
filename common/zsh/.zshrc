@@ -49,6 +49,7 @@ if [ -n "$ZSH_VERSION" ]; then
     # Aliases (Shortcuts for Commands)
     # ------------------------------
     alias vim="nvim"
+    alias v="nvim"
     alias g="git"
     alias c='clear'
     
@@ -109,26 +110,68 @@ if [ -n "$ZSH_VERSION" ]; then
     # ------------------------------
     # Search Aliases (rg, fd, fzf)
     # ------------------------------
-    if command -v rg >/dev/null && command -v fzf >/dev/null; then
-        alias rgc='rg -C 2 --line-number --sort path'
-        alias fda='fd -H -I'
+    if command -v fzf >/dev/null; then
+        # Shell integration: Ctrl-R (history), Ctrl-T (files), Alt-C (cd)
+        local _fzf_init
+        _fzf_init="$(fzf --zsh 2>/dev/null)"
+        if [[ -n "$_fzf_init" ]]; then
+            eval "$_fzf_init"
+        else
+            for _f in /opt/homebrew/opt/fzf/shell/key-bindings.zsh /usr/share/fzf/key-bindings.zsh; do
+                [[ -f "$_f" ]] && source "$_f" && break
+            done
+            for _f in /opt/homebrew/opt/fzf/shell/completion.zsh /usr/share/fzf/completion.zsh; do
+                [[ -f "$_f" ]] && source "$_f" && break
+            done
+        fi
+        unset _fzf_init _f
 
-        fif() {
-            local file_info=$(rg --line-number --column --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob '!.git/*' "" | \
-                fzf --ansi --delimiter : --preview "bat --style=numbers --color=always --highlight-line {2} {1}" --preview-window +{2}-/2)
-            if [[ -n "$file_info" ]]; then
-                nvim "+$(echo "$file_info" | awk -F: '{print $2}')" "$(echo "$file_info" | awk -F: '{print $1}')"
-            fi
-        }
+        export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --bind "ctrl-/:toggle-preview"'
+        command -v fd >/dev/null && export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+        command -v fd >/dev/null && export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-        fzp() {
-            local dir=$(fd -t d | fzf --preview "eza -T --color=always --icons {} | head -20")
-            [[ -n "$dir" ]] && cd "$dir"
-        }
+        if command -v rg >/dev/null; then
+            alias rgc='rg -C 2 --line-number --sort path'
 
-        rgt() {
-            local type=$(rg --type-list | awk -F: '{print $1}' | fzf --header "Select File Type")
-            [[ -n "$type" ]] && echo "Searching in $type files..." && rg -t "$type" "$@"
+            fif() {
+                local file_info=$(rg --line-number --column --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob '!.git/*' "" | \
+                    fzf --ansi --delimiter : --preview "bat --style=numbers --color=always --highlight-line {2} {1}" --preview-window +{2}-/2)
+                if [[ -n "$file_info" ]]; then
+                    nvim "+$(echo "$file_info" | awk -F: '{print $2}')" "$(echo "$file_info" | awk -F: '{print $1}')"
+                fi
+            }
+
+            rgt() {
+                local type=$(rg --type-list | awk -F: '{print $1}' | fzf --header "Select File Type")
+                [[ -n "$type" ]] && echo "Searching in $type files..." && rg -t "$type" "$@"
+            }
+        fi
+
+        if command -v fd >/dev/null; then
+            alias fda='fd -H -I'
+
+            # fe: fuzzy find files and open in nvim
+            fe() {
+                fd --type f --hidden --follow --exclude .git | \
+                    fzf -m --preview 'bat --color=always {}' --bind 'enter:become(nvim {+})'
+            }
+
+            fzp() {
+                local dir=$(fd -t d | fzf --preview "eza -T --color=always --icons {} | head -20")
+                [[ -n "$dir" ]] && cd "$dir"
+            }
+        fi
+
+        # fco: fuzzy git branch checkout with log preview
+        fco() {
+            local branch
+            branch=$(git branch -a 2>/dev/null \
+                | grep -v HEAD \
+                | sed 's/remotes\/origin\///' \
+                | sed 's/^[[:space:]]*//' \
+                | sort -u \
+                | fzf --preview 'git log --oneline --graph --color=always --date=short -20 $(git rev-parse --verify {} 2>/dev/null || echo HEAD)')
+            [[ -n "$branch" ]] && git checkout "$branch"
         }
 
         # yayf: Fuzzy find and install Arch packages using yay

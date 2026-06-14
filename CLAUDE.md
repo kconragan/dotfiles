@@ -51,16 +51,30 @@ Built on **LazyVim** (`common/nvim/`). Key layout:
 - **snacks.nvim** — Various UI improvements; scroll animation disabled via `snacks-animated-scrolling-off.lua`
 - **LazyVim extras** — `lazyvim.plugins.extras.lang.astro` enabled
 
-## Shell (Zsh, macOS)
+## Shell (Zsh, cross-platform)
 
-`common/zsh/.zshrc` load order matters:
-1. pyenv init (early, for PATH)
-2. zoxide init
-3. oh-my-posh / thefuck evals
-4. zsh-autosuggestions (before syntax highlighting)
-5. zsh-syntax-highlighting (must be last)
+`common/zsh/.zshrc` is shared across macOS and Linux. Load order matters:
+1. Omarchy zsh integration (Linux only, sourced early)
+2. Editor, history, pyenv config
+3. Aliases and functions
+4. Tool inits: zoxide, mise, starship, oh-my-posh, thefuck
+5. zsh-autosuggestions (before syntax highlighting)
+6. zsh-syntax-highlighting (must be last)
 
-`cd` is aliased to `z` (zoxide). `vim` is aliased to `nvim`.
+`cd` is aliased to `z` (zoxide). `vim`/`v` aliased to `nvim`. `g` aliased to `git`.
+
+### fzf functions
+
+All fzf functions live inside `if command -v fzf` and require fzf to be installed. Shell integration (Ctrl-R, Ctrl-T, Alt-C) is sourced via `fzf --zsh` with a file-based fallback for older versions.
+
+| Function | Description |
+|----------|-------------|
+| `fe` | Fuzzy find files (fd), open selection in nvim |
+| `fif` | Fuzzy find by file contents (rg), open at line in nvim |
+| `fzp` | Fuzzy cd into a directory |
+| `fco` | Fuzzy git branch checkout with log preview |
+| `rgt` | Fuzzy select rg file type, then search |
+| `yayf` | Fuzzy Arch package install via yay (Linux only) |
 
 ## Claude Skills
 
