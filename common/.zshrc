@@ -9,7 +9,7 @@ export TERM="xterm-256color"
 
 # Make nvim easier to access
 alias vim='nvim'
-alias n='nvim'
+alias v='nvim'
 alias e='nvim'
 
 # eza is a modern replacement for the 'ls' command. The flags provide a nicer
