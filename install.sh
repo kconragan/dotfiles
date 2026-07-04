@@ -80,6 +80,16 @@ Linux)
     echo " - Starship not found. Installing now..."
     sudo pacman -S starship --noconfirm
   fi
+  if ! command -v zsh &>/dev/null; then
+    echo " - Zsh not found. Installing now..."
+    sudo pacman -S zsh --noconfirm
+  fi
+
+  # Set default shell to zsh
+  if [ "$(getent passwd "$(whoami)" | cut -d: -f7)" != "/usr/bin/zsh" ]; then
+    echo " - Setting default shell to zsh..."
+    chsh -s /usr/bin/zsh
+  fi
 
   # Add Linux specific git configuration here
   echo " - Configuring git credentials and user info..."
